@@ -53,7 +53,7 @@ mfsipRoutes.post('/mfsip', function(req, res){
         startdate: req.body.startdate,
         enddate:req.body.enddate,
         frequency: req.body.frequency,
-        executiondate: req.body.executiondate
+        // executiondate: req.body.executiondate
     });
     
     MFSIP.findOne({mfid: req.body.mfid }, function(err, mf){
@@ -72,56 +72,48 @@ mfsipRoutes.post('/mfsip', function(req, res){
     });
 });
 
-//UPDATE MF Record ==> /api/mf/:_id
-// mfRoutes.put('/mf/:_id', function(req, res){
+//UPDATE MF Record ==> /api/mfsip/:_id
+mfsipRoutes.put('/mfsip/:_id', function(req, res){
 
-//     console.log("PUT /mf/:_id");
-//     res.setHeader('Access-Control-Allow-Origin', '*');
+    console.log("PUT /mfsip/:_id");
+    res.setHeader('Access-Control-Allow-Origin', '*');// Request Origin you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'PUT, POST, OPTIONS, DELETE');// Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');// Request headers you wish to allow
 
-//     // Request methods you wish to allow
-//     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS, DELETE');
+    var id = req.params._id;
 
-//     // Request headers you wish to allow
-//     // res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-//     res.setHeader('Access-Control-Allow-Headers', 'Authorization, Origin, X-Requested-With, Content-Type, Accept');
+    MFSIP.findOne({_id: new mongoose.Types.ObjectId(id) }, function(err, mfsip){
+        if (err) throw err;
 
-//     var id = req.params._id;
+        if(!mfsip){
+            return res.json({success : false, message: 'No such record exists.'});
+        } else if(mfsip){
 
-//     MF.findOne({_id: new mongoose.Types.ObjectId(id) }, function(err, mf){
-//         if (err) throw err;
+            console.log(mfsip);
+            console.log(req.body);
+            mfsip.userid = req.body.userid;
+            mfsip.code = req.body.code;
+            mfsip.name = req.body.name;
+            mfsip.amount = req.body.amount;
+            mfsip.startdate = req.body.startdate;
+            mfsip.enddate = req.body.enddate;
+            mfsip.frequency = req.body.frequency;
 
-//         if(!mf){
-//             return res.json({success : false, message: 'No such record exists.'});
-//         } else if(mf){
+            mfsip.save(function(err){
+                if(err) {
+                    throw err;
+                }
 
-//             console.log(mf);
-//             console.log(req.body);
-//             mf.userid = req.body.userid;
-//             mf.code = req.body.code;
-//             mf.name = req.body.name;
-//             mf.units = req.body.units;
-//             mf.purchasenav = req.body.purchasenav;
-//             mf.purchasedate = req.body.purchasedate;
-//             mf.currentnav = req.body.currentnav;
-//             // mf.issip = req.body.issip,
-//             // mf.salenav = req.body.salenav,
-//             // mf.saledate = req.body.saledate
-
-//             mf.save(function(err){
-//                 if(err) {
-//                     throw err;
-//                 }
-
-//                 console.log('MF Updated successfully');
-//                 res.status(200).send({
-//                     success : true,
-//                     message: 'MF Updated Successfully.',
-//                     mfrecord:mf
-//                 });
-//             });
-//         }
-//     });
-// });
+                console.log('MF SIP Updated successfully');
+                res.status(200).send({
+                    success : true,
+                    message: 'MF SIP Updated Successfully.',
+                    mfsiprecord:mfsip
+                });
+            });
+        }
+    });
+});
 
 //DELETE MF SIP Record ==> /api/mfsip/:_id
 mfsipRoutes.delete('/mfsip/:_id', function(req,res){
