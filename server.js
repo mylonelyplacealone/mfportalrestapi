@@ -21,6 +21,7 @@ app.use(morgan('dev'));
 
 // apply the routes to our application with the prefix /api
 app.use('/api', require('./routes/mfroutes'));
+app.use('/api', require('./routes/mfsiproutes'));
 
 //Start the Server
 app.listen(port);
