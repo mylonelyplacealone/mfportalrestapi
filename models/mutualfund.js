@@ -12,7 +12,7 @@ module.exports = mongoose.model('MF', new Schema({
     purchasenav: Number,
     purchasedate:Date,
     currentnav: Number,
-    // issip?:Boolean,
+    issip:Boolean,
     // salenav?:Number,
     // saledate?:Date
 }));

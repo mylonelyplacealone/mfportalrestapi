@@ -70,7 +70,7 @@ mfRoutes.post('/mf', function(req, res){
         purchasenav: req.body.purchasenav,
         purchasedate:req.body.purchasedate,
         currentnav: req.body.currentnav,
-        // issip:req.body.issip,
+        issip:req.body.issip,
         // salenav:req.body.salenav,
         // saledate:req.body.saledate
     });
