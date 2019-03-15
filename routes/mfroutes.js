@@ -30,9 +30,27 @@ mfRoutes.get('/mflist', function(req, res){
     // Request headers you wish to allow
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
 
-    MF.find({ userid: req.query.userid}, function(err, mflist){
+    MF.find({ userid: req.query.userid, salenav : null}, function(err, mflist){
         //console.log(mflist);
         res.json(mflist);
+    })
+});
+
+//GET ALL Sold Mutual Funds ==> /api/soldmflist
+mfRoutes.get('/soldmflist', function(req, res){
+    console.log('Get /soldmflist ');
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    MF.find({ userid: req.query.userid, salenav : { $ne: null }}, function(err, soldmflist){
+        // console.log(soldmflist);
+        res.json(soldmflist);
     })
 });
 
@@ -126,9 +144,11 @@ mfRoutes.put('/mf/:_id', function(req, res){
             mf.purchasenav = req.body.purchasenav;
             mf.purchasedate = req.body.purchasedate;
             mf.currentnav = req.body.currentnav;
-            // mf.issip = req.body.issip,
-            // mf.salenav = req.body.salenav,
-            // mf.saledate = req.body.saledate
+            mf.issip = mf.issip;
+            if(req.body.salenav)
+                mf.salenav = req.body.salenav;
+            if(req.body.saledate)
+                mf.saledate = req.body.saledate;
 
             mf.save(function(err){
                 if(err) {
