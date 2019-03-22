@@ -6,6 +6,46 @@ var config = require('../config');
 var mongoose = require('mongoose');
 mongoose.connect(config.database);
 
+//-------------------------email functionality-----------------------------
+var nodemailer = require('nodemailer');
+
+function sendmail(mflist){
+    var transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'mfmanager2019@gmail.com', // Your email id
+            pass: 'Mfmgr@12' // Your password
+        },
+        tls: { rejectUnauthorized: false }
+    });
+    
+    var text = 'Hello world from \n\n' + mflist;// + req.body.name;
+    
+    var html="<table style='border:1px solid red;'>";
+    for(var i = 0; i < mflist.length;i++){
+        html+= "<tr><td>" + mflist[i].name + "</td><td>" + mflist[i].code + "</td></tr>";
+    }
+    html+= "</table>";
+    var mailOptions = {
+        from: 'mfmanager2019@gmail.com', // sender address
+        to: 'nitin.vj2006@yahoo.com', // list of receivers
+        subject: 'Email Example', // Subject line
+        //text: text //, // plaintext body
+        html: html//'<b>Hello world ✔</b>' // You can choose to send an HTML body instead
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            console.log(error);
+            res.json({yo: 'error'});
+        }else{
+            console.log('Message sent: ' + info.response);
+            res.json({yo: info.response});
+        };
+    });
+}    
+//---------------------------------------------------------------------
+
 //Middle ware that is specific to this router
 mfRoutes.use(function timeLog(req, res, next) {
     console.log('Time: ', Date.now());
@@ -15,7 +55,7 @@ mfRoutes.use(function timeLog(req, res, next) {
 //Define ALL MF Routes
 
 mfRoutes.get('/', function(req, res) {
-    res.json({ message: 'hooray! welcome to our rest video api!' });  
+    res.json({ message: 'hooray! welcome to our mf manager api!' });  
   });
 
 //GET ALL Mutual Funds ==> /api/mflist
@@ -32,6 +72,7 @@ mfRoutes.get('/mflist', function(req, res){
 
     MF.find({ userid: req.query.userid, salenav : null}, function(err, mflist){
         //console.log(mflist);
+        //sendmail(mflist);
         res.json(mflist);
     })
 });
@@ -52,7 +93,7 @@ mfRoutes.get('/soldmflist', function(req, res){
         // console.log(soldmflist);
         res.json(soldmflist);
     })
-});
+}); 
 
 //Options preflight request ==>
 mfRoutes.options("*", function(req,res,next){
