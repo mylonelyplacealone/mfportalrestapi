@@ -130,6 +130,7 @@ mfRoutes.post('/mf', function(req, res){
         purchasedate:req.body.purchasedate,
         currentnav: req.body.currentnav,
         issip:req.body.issip,
+        comments:req.body.comments,
         // salenav:req.body.salenav,
         // saledate:req.body.saledate
     });
@@ -186,6 +187,7 @@ mfRoutes.put('/mf/:_id', function(req, res){
             mf.purchasedate = req.body.purchasedate;
             mf.currentnav = req.body.currentnav;
             mf.issip = mf.issip;
+            mf.comments = req.body.comments;
             if(req.body.salenav)
                 mf.salenav = req.body.salenav;
             if(req.body.saledate)
