@@ -129,6 +129,7 @@ mfRoutes.post('/mf', function(req, res){
         purchasenav: req.body.purchasenav,
         purchasedate:req.body.purchasedate,
         currentnav: req.body.currentnav,
+        isprofit:req.body.isprofit,
         issip:req.body.issip,
         comments:req.body.comments,
         // salenav:req.body.salenav,
@@ -186,6 +187,7 @@ mfRoutes.put('/mf/:_id', function(req, res){
             mf.purchasenav = req.body.purchasenav;
             mf.purchasedate = req.body.purchasedate;
             mf.currentnav = req.body.currentnav;
+            mf.isprofit = req.body.isprofit;
             mf.issip = mf.issip;
             mf.comments = req.body.comments;
             if(req.body.salenav)
@@ -199,6 +201,8 @@ mfRoutes.put('/mf/:_id', function(req, res){
                 }
 
                 console.log('MF Updated successfully');
+            console.log(mf);
+
                 res.status(200).send({
                     success : true,
                     message: 'MF Updated Successfully.',
