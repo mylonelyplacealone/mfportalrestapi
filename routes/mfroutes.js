@@ -1,6 +1,7 @@
 var express = require('express');
 var mfRoutes = express.Router(); // get an instance of the router for api routes
 var MF = require('../models/mutualfund'); // MF model
+var MFSnapshot = require('../models/mfsnapshot'); // MF Snapshot model
 
 var config = require('../config');
 var mongoose = require('mongoose');
@@ -242,6 +243,108 @@ mfRoutes.delete('/mf/:_id', function(req,res){
     });
 });
 
+//Take snapshot ==> /api/mf/snapshot
+mfRoutes.post('/snapshot', function(req, res){
+    console.log('Post /snapshot ' + req.body.userid);
 
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    MFSnapshot.find({ userid: req.body.userid, snapshotdate : req.body.snapshotdate}, function(err, mfsnapshotlist){
+        if (err) throw err;
+
+        if(mfsnapshotlist.length > 0){
+            console.log('Snapshot already exists.');
+            return res.json({success : false, message: 'Snapshot already taken on ' + req.body.snapshotdate.substring(0,15)});
+        } else {
+            console.log('Adding new snapshot for ' + req.body.snapshotdate);
+
+            MF.find({ userid: req.body.userid, salenav : null}, function(err, mflist){
+                // res.json(mflist);
+                console.log(mflist.length);
+        
+                for(var i = 0; i < mflist.length;i++){
+        
+                    var newMF = new MFSnapshot({
+                        userid:mflist[i].userid,
+                        snapshotdate:req.body.snapshotdate, //new Date(new Date().setUTCHours(0, 0, 0, 0)),
+                        code:mflist[i].code,
+                        name: mflist[i].name,
+                        units: mflist[i].units,
+                        purchasenav: mflist[i].purchasenav,
+                        purchasedate:mflist[i].purchasedate,
+                        currentnav: mflist[i].currentnav,
+                        isprofit:mflist[i].isprofit,
+                        issip:mflist[i].issip,
+                        comments:mflist[i].comments,
+                    });
+                
+                    newMF.save(function(err){
+                        if(err) {
+                            throw err;
+                        }
+                        //console.log('MF saved successfully');
+                    });
+                }
+        
+                res.status(200).send({
+                    success : true,
+                    message: 'Snapshot created successfully for ' + req.body.snapshotdate.substring(0,15)
+                });
+            })
+        }
+    })
+});
   
+//GET ALL MF Snapshots Dates ==> /api/snapshotdates
+mfRoutes.get('/snapshotdates', function(req, res){
+    console.log('in');
+    console.log('Get /snapshotdates ');
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    MFSnapshot.find({ userid: req.query.userid}, function(err, mflist){
+        console.log(mflist);
+        console.log(mflist.map(item => item.snapshotdate).filter((date, i, self) => self.findIndex(d => d.getTime() === date.getTime()) === i));
+
+        res.json(mflist.map(item => item.snapshotdate).filter((date, i, self) => self.findIndex(d => d.getTime() === date.getTime()) === i));
+    })
+});
+
+mfRoutes.get('/snapshotdata', function(req, res){
+    console.log('Get /snapshotdata');
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    console.log(req.query.snapshotdate);
+
+    MFSnapshot.find({ userid: req.query.userid, snapshotdate : req.query.snapshotdate}, function(err, mflist){
+        res.json(mflist);
+    })
+});
+
+//DELETE MF Snapshot ==> /api/snapshot
+mfRoutes.delete('/snapshot', function(req,res){
+
+    console.log('Delete /snapshot');
+    
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Authorization, Origin, X-Requested-With, Content-Type, Accept');
+
+    MFSnapshot.deleteMany({ userid: req.query.userid, snapshotdate : req.query.snapshotdate }, function (err, mf) {
+        if (err) throw err;
+
+        res.status(200).send({
+            success: true, 
+            message: 'Snapshot deleted successfully!',
+        });
+    });
+});
+
 module.exports = mfRoutes;
