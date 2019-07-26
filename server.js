@@ -124,8 +124,10 @@ apiRoutes.use(function(req, res, next){    // Website you wish to allow to conne
 // apply the routes to our application with the prefix /api
 app.use('/api', apiRoutes);
 app.use('/api', require('./routes/mfroutes'));
+app.use('/api', require('./routes/stockroutes'));
 app.use('/api', require('./routes/mfsiproutes'));
 app.use('/api', require('./routes/userroutes'));
+app.use('/api/bankdetail', require('./routes/bankroutes'));
 
 //Start the Server
 app.listen(port);
