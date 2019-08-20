@@ -86,8 +86,8 @@ questionRoutes.post('/new', function(req, res){
     // });
 });
 
-// UPDATE Question Record ==> /api/question/account/:_id
-questionRoutes.put('/question/:_id', function(req, res){
+// UPDATE Question Record ==> /api/question/:_id
+questionRoutes.put('/:_id', function(req, res){
 
     console.log("PUT /question/:_id");
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -130,7 +130,7 @@ questionRoutes.put('/question/:_id', function(req, res){
 });
 
 //DELETE Question Record ==> /api/question/:_id
-questionRoutes.delete('/question/:_id', function(req,res){
+questionRoutes.delete('/:_id', function(req,res){
     console.log('Delete /question');
 
     res.setHeader('Access-Control-Allow-Origin', '*');
