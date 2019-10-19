@@ -71,9 +71,23 @@ mfRoutes.get('/mflist', function(req, res){
     // Request headers you wish to allow
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
 
-    MF.find({ userid: req.query.userid, salenav : null}, function(err, mflist){
+    //MF.find({ userid: req.query.userid, salenav : null}, function(err, mflist){
+    MF.find({ salenav : null}, function(err, mflist){
         //console.log(mflist);
         //sendmail(mflist);
+        if(req.query.userid != "1111")
+        {
+            mflist = mflist.filter(function(item) {
+                return item.userid == req.query.userid;
+              });
+        }
+        else
+        {
+            mflist = mflist.filter(function(item) {
+                return [555 , 556, 558].includes(item.userid);
+              });
+        }
+                    
         res.json(mflist);
     })
 });

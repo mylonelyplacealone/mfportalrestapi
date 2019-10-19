@@ -26,7 +26,21 @@ stockRoutes.get('/stocklist', function(req, res){
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
 
-    STOCK.find({ userid: req.query.userid, salenav : null}, function(err, stocklist){
+    //STOCK.find({ userid: req.query.userid, salenav : null}, function(err, stocklist){
+    STOCK.find({ salenav : null}, function(err, stocklist){
+        // res.json(stocklist);
+        if(req.query.userid != "1111")
+        {
+            stocklist = stocklist.filter(function(item) {
+                return item.userid == req.query.userid;
+              });
+        }
+        else
+        {
+            stocklist = stocklist.filter(function(item) {
+                return [555 , 556, 558].includes(item.userid);
+              });
+        }
         res.json(stocklist);
     })
 });

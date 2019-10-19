@@ -103,12 +103,14 @@ bankRoutes.get('/accounts', function(req, res){
         console.log("Specific Account Type : " + req.query.accType);
 
         if(req.query.accType != 'EPFPPF'){
-            ACCOUNT.find({acctype: req.query.accType, userid: req.query.userid }, function(err, acclist){
+            //ACCOUNT.find({acctype: req.query.accType, userid: req.query.userid }, function(err, acclist){
+            ACCOUNT.find({acctype: req.query.accType }, function(err, acclist){
                 console.log(acclist);
                 res.json(acclist);
             })
         }
         else{
+            //ACCOUNT.find({acctype: {$in: ['EPF', 'PPF']} , userid: req.query.userid }, function(err, acclist){
             ACCOUNT.find({acctype: {$in: ['EPF', 'PPF']} , userid: req.query.userid }, function(err, acclist){
                 console.log(acclist);
                 res.json(acclist);
@@ -118,8 +120,22 @@ bankRoutes.get('/accounts', function(req, res){
     else{
         console.log("All Accounts: " + req.query.accType);
 
-        ACCOUNT.find({ userid: req.query.userid }, function(err, acclist){
+        //ACCOUNT.find({ userid: req.query.userid }, function(err, acclist){
+        ACCOUNT.find({ }, function(err, acclist){
             console.log(acclist);
+            //res.json(acclist);
+            if(req.query.userid != "1111")
+            {
+                acclist = acclist.filter(function(item) {
+                    return item.userid == req.query.userid;
+                });
+            }
+            else
+            {
+                acclist = acclist.filter(function(item) {
+                    return [555 , 556, 558].includes(item.userid);
+                });
+            }
             res.json(acclist);
         })
     }
