@@ -127,6 +127,7 @@ app.use('/api', require('./routes/mfroutes'));
 app.use('/api', require('./routes/stockroutes'));
 app.use('/api', require('./routes/mfsiproutes'));
 app.use('/api', require('./routes/userroutes'));
+app.use('/api', require('./routes/portfolioroutes'));
 app.use('/api/bankdetail', require('./routes/bankroutes'));
 app.use('/api/question', require('./routes/questionroutes'));
 
