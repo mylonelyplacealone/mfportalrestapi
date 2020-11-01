@@ -93,22 +93,22 @@ portfolioRoutes.get('/portfoliosnapshots', function(req, res){
 });
 
 // //DELETE MF Snapshot ==> /api/snapshot
-// mfRoutes.delete('/snapshot', function(req,res){
+portfolioRoutes.delete('/portfoliosnapshot', function(req,res){
 
-//     console.log('Delete /snapshot');
+    console.log('Delete /portfoliosnapshot');
     
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS, DELETE');
-//     res.setHeader('Access-Control-Allow-Headers', 'Authorization, Origin, X-Requested-With, Content-Type, Accept');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Authorization, Origin, X-Requested-With, Content-Type, Accept');
 
-//     MFSnapshot.deleteMany({ userid: req.query.userid, snapshotdate : req.query.snapshotdate }, function (err, mf) {
-//         if (err) throw err;
+    Portfoliosnapshot.deleteMany({ userid: req.query.userid, snapshotdate : req.query.snapshotdate }, function (err, mf) {
+        if (err) throw err;
 
-//         res.status(200).send({
-//             success: true, 
-//             message: 'Snapshot deleted successfully!',
-//         });
-//     });
-// });
+        res.status(200).send({
+            success: true, 
+            message: 'Snapshot deleted successfully!',
+        });
+    });
+});
 
 module.exports = portfolioRoutes;
