@@ -7,6 +7,14 @@ var config = require('../config');
 var mongoose = require('mongoose');
 mongoose.connect(config.database);
 
+// mongoose.connect(
+//     config.database,
+//     { dbName: 'finmanager', useNewUrlParser: true, useUnifiedTopology: true },
+//     () => {
+//         console.log("Connected to db");
+//     }
+// );
+
 //Middle ware that is specific to this router
 userRoutes.use(function timeLog(req, res, next) {
     console.log('Time: ', Date.now());
