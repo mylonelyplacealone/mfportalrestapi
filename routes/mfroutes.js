@@ -1,6 +1,7 @@
 var express = require('express');
 var mfRoutes = express.Router(); // get an instance of the router for api routes
 var MF = require('../models/mutualfund'); // MF model
+var STOCK = require('../models/stock'); // Stock model
 var MFSnapshot = require('../models/mfsnapshot'); // MF Snapshot model
 
 var config = require('../config');
@@ -104,8 +105,29 @@ mfRoutes.get('/soldmflist', function(req, res){
     // Request headers you wish to allow
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
 
-    MF.find({ userid: req.query.userid, salenav : { $ne: null }}, function(err, soldmflist){
-        // console.log(soldmflist);
+    MF.find({ userid: req.query.userid, salenav : { $ne: null }}, async function(err, soldmflist){
+       
+        await STOCK.find({ userid: req.query.userid, salenav : { $ne: null }}, function(err, soldstocklist){
+            for(var i = 0; i < soldstocklist.length;i++){
+            //     console.log("Shares Entry" + i.toString());
+            //    console.log(soldstocklist[i]);
+                var newMF = new MF({
+                    userid:soldstocklist[i].userid,
+                    code:(123 + Math.floor(Math.random() * 25)),
+                    name: soldstocklist[i].name,
+                    units: soldstocklist[i].units,
+                    purchasenav: soldstocklist[i].purchasenav,
+                    purchasedate:soldstocklist[i].purchasedate,
+                    currentnav: soldstocklist[i].currentnav,
+                    isprofit:soldstocklist[i].isprofit,
+                    comments:soldstocklist[i].comments,
+                    salenav:soldstocklist[i].salenav,
+                    saledate:soldstocklist[i].saledate
+                });
+                soldmflist.push(newMF);
+            }
+        })
+        //console.log(soldmflist);
         res.json(soldmflist);
     })
 }); 
