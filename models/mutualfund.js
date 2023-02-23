@@ -12,10 +12,11 @@ module.exports = mongoose.model('MF', new Schema({
     purchasenav: Number,
     purchasedate:Date,
     currentnav: Number,
-    isprofit:Boolean,
-    issip:Boolean,
+    isprofit:{ type: Boolean, default : false},
+    issip:{ type: Boolean, default : false},
     comments:String,
     salenav:{type: Number, trim: true, index: true, required: false, default: null},
     saledate:{type: Date, trim: true, index: true, required: false, default: null},
+    isrenewed:{ type: Boolean, default : false}
 }));
 

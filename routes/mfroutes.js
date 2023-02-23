@@ -224,13 +224,14 @@ mfRoutes.put('/mf/:_id', function(req, res){
             mf.purchasenav = req.body.purchasenav;
             mf.purchasedate = req.body.purchasedate;
             mf.currentnav = req.body.currentnav;
-            mf.isprofit = req.body.isprofit;
-            mf.issip = mf.issip;
+            mf.isprofit = req.body.isprofit? req.body.isprofit :false
+            mf.issip = req.body.issip ? req.body.issip :false;
             mf.comments = req.body.comments;
             if(req.body.salenav)
                 mf.salenav = req.body.salenav;
             if(req.body.saledate)
                 mf.saledate = req.body.saledate;
+            mf.isrenewed = req.body.isrenewed ? req.body.isrenewed : false;
 
             mf.save(function(err){
                 if(err) {
