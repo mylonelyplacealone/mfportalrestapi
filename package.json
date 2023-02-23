@@ -9,5 +9,8 @@
     "morgan": "^1.9.1",
     "nodemailer": "^5.1.1",
     "nodemon": "^1.18.10"
+  },
+  "engines": {
+    "node": "14.20.1"
   }
 }
