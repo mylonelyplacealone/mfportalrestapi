@@ -1,5 +1,14 @@
 var express = require('express');
+const cors = require('cors');
 var app = express();
+
+// Allow only your frontend domain
+app.use(cors({
+  origin: 'https://mfmanager.onrender.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
+
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 
