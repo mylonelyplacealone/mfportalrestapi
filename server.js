@@ -37,14 +37,7 @@ mongoose.connect(config.database);
 
 var apiRoutes = express.Router();
 //Route to authenticate user (POST http://localhost:8080/api/authenticate)
-apiRoutes.post('/authenticate', function(req, res){   
-       
-    // Request origins you wish to allow
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+apiRoutes.post('/authenticate', function(req, res){
 
     //find the user
     User.findOne({email: req.body.email }, function(err, user){
@@ -80,29 +73,10 @@ apiRoutes.post('/authenticate', function(req, res){
     })
 });
 
-// Options preflight request ==>
-apiRoutes.options("*", function(req,res,next){
-    console.log('Options *');
-
-    res.setHeader('Access-Control-Allow-Origin', '*');
-
-    // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'PUT, POST, OPTIONS, DELETE');
-
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, x-access-token');
-    
-    res.sendStatus(200);
-});
-
 // TODO: route middleware to verify a token
-apiRoutes.use(function(req, res, next){    // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
+apiRoutes.use(function(req, res, next){
     // check header or url parameters or post parameters for token
-    var token = req.body.token || req.query.token 
+    var token = req.body.token || req.query.token
         || req.headers['x-access-token'];
 
     //Decode Token
