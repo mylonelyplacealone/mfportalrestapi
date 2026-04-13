@@ -36,8 +36,17 @@ var User = require('./models/user'); // User model
 var jwt = require('jsonwebtoken');
 var config = require('./config');
 var mongoose = require('mongoose');
-mongoose.connect(config.database) .then(() => console.log('✅ Connected to MongoDB Atlas'))
-  .catch(err => console.error('❌ MongoDB connection error:', err));
+mongoose.connect(config.database,
+{
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}, (err) => {
+  if (err) {
+    console.error('❌ MongoDB connection error:', err);
+  } else {
+    console.log('✅ Connected to MongoDB Atlas');
+  }
+});
 
 var apiRoutes = express.Router();
 //Route to authenticate user (POST http://localhost:8080/api/authenticate)
