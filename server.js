@@ -1,3 +1,5 @@
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 var express = require('express');
 const cors = require('cors');
 var app = express();
@@ -34,7 +36,8 @@ var User = require('./models/user'); // User model
 var jwt = require('jsonwebtoken');
 var config = require('./config');
 var mongoose = require('mongoose');
-mongoose.connect(config.database);
+mongoose.connect(config.database) .then(() => console.log('✅ Connected to MongoDB Atlas'))
+  .catch(err => console.error('❌ MongoDB connection error:', err));
 
 var apiRoutes = express.Router();
 //Route to authenticate user (POST http://localhost:8080/api/authenticate)
