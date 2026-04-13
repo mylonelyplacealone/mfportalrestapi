@@ -23,7 +23,7 @@ app.set('superSecret', config.secret);
 //app.use(bodyParser.urlencoded({extended:false}));
 //app.use(bodyParser.json());
 app.use(express.json());
-
+ 
 //Use morgan to log requests to console
 app.use(morgan('dev'));
 
