@@ -11,7 +11,7 @@ app.use(cors({
   credentials: true
 }));
 
-//var bodyParser = require('body-parser');
+var bodyParser = require('body-parser');
 var morgan = require('morgan');
 
 var jwt = require('jsonwebtoken');
@@ -22,9 +22,9 @@ var port = process.env.PORT || 5000;
 app.set('superSecret', config.secret);
 
 //Use body parser to extract values from POST and/or URL parameters
-//app.use(bodyParser.urlencoded({extended:false}));
-//app.use(bodyParser.json());
-app.use(express.json());
+app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.json());
+//app.use(express.json());
  
 //Use morgan to log requests to console
 app.use(morgan('dev'));
@@ -55,7 +55,7 @@ apiRoutes.post('/authenticate', function(req, res){
     //find the user
     User.findOne({email: req.body.email }, function(err, user){
         if (err) throw err;
-
+console.log(user);
         if(!user){
             res.json({success : false, message: 'Authentication failed. User with email ' + req.body.email + ' does not exists.'});
         } else if(user){
