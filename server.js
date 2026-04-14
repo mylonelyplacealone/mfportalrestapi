@@ -4,9 +4,14 @@ var express = require('express');
 const cors = require('cors');
 var app = express();
 
+const allowedOrigins = [
+  'http://localhost:4300',
+  'https://mfmanager.onrender.com'
+];
+
 // Allow only your frontend domain
-app.use(cors({
-  origin: {'https://mfmanager.onrender.com','http://localhost:4300'},
+app.use(cors({ 
+  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
